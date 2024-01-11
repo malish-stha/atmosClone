@@ -1,20 +1,15 @@
-import {
-  Float,
-  Line,
-  OrbitControls,
-  PerspectiveCamera,
-  Text,
-  useScroll,
-} from "@react-three/drei";
+import { Float, PerspectiveCamera, useScroll } from "@react-three/drei";
 import { Background } from "./Background";
 import { Airplane } from "./Airplane";
 import { Cloud } from "./Cloud";
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
+import { Euler, Group, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
 import { TextSection } from "./TextSection";
 import { fadeOnBeforeCompile } from "../utils/fadeMaterial";
 import gsap from "gsap";
+import { usePlay } from "../contexts/Play";
 
 const LINE_NB_POINTS = 1000;
 const CURVE_DISTANCE = 250;
@@ -36,6 +31,9 @@ export const Home = () => {
       new THREE.Vector3(0, 0, -7 * CURVE_DISTANCE),
     ];
   }, []);
+
+  const sceneOpacity = useRef(0);
+  const lineMaterialRef = useRef();
 
   const curve = useMemo(() => {
     return new THREE.CatmullRomCurve3(curvePoints, false, "catmullrom", 0.5);
@@ -91,6 +89,180 @@ We have a wide range of beverages!`,
     return curve.getPoints(LINE_NB_POINTS);
   }, [curve]);
 
+  const clouds = useMemo(
+    () => [
+      // STARTING
+      {
+        position: new Vector3(-3.5, -3.2, -7),
+      },
+      {
+        position: new Vector3(3.5, -4, -10),
+      },
+      {
+        scale: new Vector3(4, 4, 4),
+        position: new Vector3(-18, 0.2, -68),
+        rotation: new Euler(-Math.PI / 5, Math.PI / 6, 0),
+      },
+      {
+        scale: new Vector3(2.5, 2.5, 2.5),
+        position: new Vector3(10, -1.2, -52),
+      },
+      // FIRST POINT
+      {
+        scale: new Vector3(4, 4, 4),
+        position: new Vector3(
+          curvePoints[1].x + 10,
+          curvePoints[1].y - 4,
+          curvePoints[1].z + 64
+        ),
+      },
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[1].x - 20,
+          curvePoints[1].y + 4,
+          curvePoints[1].z + 28
+        ),
+        rotation: new Euler(0, Math.PI / 7, 0),
+      },
+      {
+        rotation: new Euler(0, Math.PI / 7, Math.PI / 5),
+        scale: new Vector3(5, 5, 5),
+        position: new Vector3(
+          curvePoints[1].x - 13,
+          curvePoints[1].y + 4,
+          curvePoints[1].z - 62
+        ),
+      },
+      {
+        rotation: new Euler(Math.PI / 2, Math.PI / 2, Math.PI / 3),
+        scale: new Vector3(5, 5, 5),
+        position: new Vector3(
+          curvePoints[1].x + 54,
+          curvePoints[1].y + 2,
+          curvePoints[1].z - 82
+        ),
+      },
+      {
+        scale: new Vector3(5, 5, 5),
+        position: new Vector3(
+          curvePoints[1].x + 8,
+          curvePoints[1].y - 14,
+          curvePoints[1].z - 22
+        ),
+      },
+      // SECOND POINT
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[2].x + 6,
+          curvePoints[2].y - 7,
+          curvePoints[2].z + 50
+        ),
+      },
+      {
+        scale: new Vector3(2, 2, 2),
+        position: new Vector3(
+          curvePoints[2].x - 2,
+          curvePoints[2].y + 4,
+          curvePoints[2].z - 26
+        ),
+      },
+      {
+        scale: new Vector3(4, 4, 4),
+        position: new Vector3(
+          curvePoints[2].x + 12,
+          curvePoints[2].y + 1,
+          curvePoints[2].z - 86
+        ),
+        rotation: new Euler(Math.PI / 4, 0, Math.PI / 3),
+      },
+      // THIRD POINT
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[3].x + 3,
+          curvePoints[3].y - 10,
+          curvePoints[3].z + 50
+        ),
+      },
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[3].x - 10,
+          curvePoints[3].y,
+          curvePoints[3].z + 30
+        ),
+        rotation: new Euler(Math.PI / 4, 0, Math.PI / 5),
+      },
+      {
+        scale: new Vector3(4, 4, 4),
+        position: new Vector3(
+          curvePoints[3].x - 20,
+          curvePoints[3].y - 5,
+          curvePoints[3].z - 8
+        ),
+        rotation: new Euler(Math.PI, 0, Math.PI / 5),
+      },
+      {
+        scale: new Vector3(5, 5, 5),
+        position: new Vector3(
+          curvePoints[3].x + 0,
+          curvePoints[3].y - 5,
+          curvePoints[3].z - 98
+        ),
+        rotation: new Euler(0, Math.PI / 3, 0),
+      },
+      // FOURTH POINT
+      {
+        scale: new Vector3(2, 2, 2),
+        position: new Vector3(
+          curvePoints[4].x + 3,
+          curvePoints[4].y - 10,
+          curvePoints[4].z + 2
+        ),
+      },
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[4].x + 24,
+          curvePoints[4].y - 6,
+          curvePoints[4].z - 42
+        ),
+        rotation: new Euler(Math.PI / 4, 0, Math.PI / 5),
+      },
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[4].x - 4,
+          curvePoints[4].y + 9,
+          curvePoints[4].z - 62
+        ),
+        rotation: new Euler(Math.PI / 3, 0, Math.PI / 3),
+      },
+      // FINAL
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[7].x + 12,
+          curvePoints[7].y - 5,
+          curvePoints[7].z + 60
+        ),
+        rotation: new Euler(-Math.PI / 4, -Math.PI / 6, 0),
+      },
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[7].x - 12,
+          curvePoints[7].y + 5,
+          curvePoints[7].z + 120
+        ),
+        rotation: new Euler(Math.PI / 4, Math.PI / 6, 0),
+      },
+    ],
+    []
+  );
+
   const shape = useMemo(() => {
     const shape = new THREE.Shape();
     shape.moveTo(0, -0.08);
@@ -104,7 +276,19 @@ We have a wide range of beverages!`,
   const scroll = useScroll();
   const lastScroll = useRef(0);
 
+  const { play } = usePlay();
+
   useFrame((_state, delta) => {
+    lineMaterialRef.current.opacity = sceneOpacity.current;
+
+    if (play & (sceneOpacity.current < 1)) {
+      sceneOpacity.current = THREE.MathUtils.lerp(
+        sceneOpacity.current,
+        1,
+        delta * 0.1
+      );
+    }
+
     const scrollOffset = Math.max(0, scroll.offset);
 
     let friction = 1;
@@ -140,6 +324,7 @@ We have a wide range of beverages!`,
     lerpedScrollOffset = Math.max(lerpedScrollOffset, 0);
 
     lastScroll.current = lerpedScrollOffset;
+    tl.current.seek(lerpedScrollOffset * tl.current.duration());
 
     const curPoint = curve.getPoint(lerpedScrollOffset);
 
@@ -207,15 +392,43 @@ We have a wide range of beverages!`,
     colorB: "#abaadd",
   });
 
+  const planeInTl = useRef();
+
   useLayoutEffect(() => {
     tl.current = gsap.timeline();
 
     tl.current.to(backgroundColors.current, {
       duration: 1,
-      colorA: "black",
-      colorB: "white",
+      colorA: "#6f35cc",
+      colorB: "#ffad30",
+    });
+    tl.current.to(backgroundColors.current, {
+      duration: 1,
+      colorA: "#424242",
+      colorB: "#ffcc00",
+    });
+    tl.current.to(backgroundColors.current, {
+      duration: 1,
+      colorA: "#81318b",
+      colorB: "#55ab8f",
+    });
+
+    tl.current.pause();
+
+    planeInTl.current = gsap.timeline();
+    planeInTl.current.pause();
+    planeInTl.current.from(airplane.current.position, {
+      duration: 3,
+      z: 5,
+      y: -2,
     });
   }, []);
+
+  useEffect(() => {
+    if (play) {
+      planeInTl.current.play();
+    }
+  });
 
   return (
     <>
@@ -254,7 +467,7 @@ We have a wide range of beverages!`,
           />
           <meshStandardMaterial
             color={"white"}
-            // ref={lineMaterialRef}
+            ref={lineMaterialRef}
             opacity={1}
             transparent
             envMapIntensity={2}
@@ -263,20 +476,9 @@ We have a wide range of beverages!`,
         </mesh>
       </group>
 
-      <Cloud opacity={0.5} scale={[0.3, 0.3, 0.3]} position={[-2, 1, -3]} />
-      <Cloud
-        opacity={0.5}
-        scale={[0.3, 0.3, 0.3]}
-        position={[-1.5, -0.5, -2]}
-      />
-      <Cloud
-        opacity={0.7}
-        scale={[0.3, 0.3, 0.4]}
-        rotation-y={Math.PI / 9}
-        position={[-2, -0.2, -12]}
-      />
-      <Cloud opacity={0.7} scale={[0.5, 0.5, 0.5]} position={[-1, 1, -53]} />
-      <Cloud opacity={0.3} scale={[0.8, 0.8, 0.8]} position={[0, 1, -100]} />
+      {clouds.map((cloud, index) => (
+        <Cloud sceneOpacity={sceneOpacity} {...cloud} key={index} />
+      ))}
     </>
   );
 };

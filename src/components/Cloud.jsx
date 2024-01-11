@@ -11,9 +11,16 @@ import { useGLTF } from "@react-three/drei";
 
 import cloudScene from "../assets/models/3D/cloud.glb";
 import { fadeOnBeforeCompile } from "../utils/fadeMaterial";
+import { useFrame } from "@react-three/fiber";
 
-export function Cloud({ opacity, ...props }) {
+export function Cloud({ sceneOpacity, ...props }) {
   const { nodes, materials } = useGLTF(cloudScene);
+
+  const materialRef = useRef();
+
+  useFrame(() => {
+    materialRef.current.opacity = sceneOpacity.current;
+  });
   return (
     <group {...props} dispose={null}>
       <mesh
@@ -21,10 +28,10 @@ export function Cloud({ opacity, ...props }) {
         material={materials.Material}
       >
         <meshStandardMaterial
+          ref={materialRef}
           onBeforeCompile={fadeOnBeforeCompile}
           envMapIntensity={2}
           transparent
-          opacity={opacity}
         />
       </mesh>
     </group>

@@ -34,7 +34,7 @@ export const Background = ({ backgroundColors }) => {
           <Gradient ref={gradientRef} axes={"y"} start={start} end={end} />
         </LayerMaterial>
       </Sphere>
-      <Environment resolution={256}>
+      <Environment resolution={256} frames={Infinity}>
         <Sphere
           scale={[100, 100, 100]}
           rotation-y={Math.PI / 2}
