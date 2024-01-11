@@ -12,7 +12,7 @@ import { useGLTF } from "@react-three/drei";
 
 import planeScene from "../assets/models/3D/plane.glb";
 
-export function Plane(props) {
+export function Airplane(props) {
   const { nodes, materials } = useGLTF(planeScene);
   return (
     <group {...props} dispose={null}>

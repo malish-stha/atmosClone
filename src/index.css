@@ -6,3 +6,16 @@
 body {
   margin: 0;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.23);
+}
+
+::-webkit-scrollbar-thumb {
+  background: white;
+  height: 10%;
+}
