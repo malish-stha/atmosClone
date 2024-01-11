@@ -10,6 +10,7 @@ import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 
 import cloudScene from "../assets/models/3D/cloud.glb";
+import { fadeOnBeforeCompile } from "../utils/fadeMaterial";
 
 export function Cloud({ opacity, ...props }) {
   const { nodes, materials } = useGLTF(cloudScene);
@@ -18,11 +19,14 @@ export function Cloud({ opacity, ...props }) {
       <mesh
         geometry={nodes.Nube001_Material_0.geometry}
         material={materials.Material}
-        opacity={opacity}
-        // position={[677.233, 0, 0]}
-        // rotation={[-Math.PI / 2, 0, 0]}
-        // scale={58.204}
-      />
+      >
+        <meshStandardMaterial
+          onBeforeCompile={fadeOnBeforeCompile}
+          envMapIntensity={2}
+          transparent
+          opacity={opacity}
+        />
+      </mesh>
     </group>
   );
 }
