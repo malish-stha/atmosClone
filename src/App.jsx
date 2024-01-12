@@ -4,9 +4,19 @@ import { ScrollControls } from "@react-three/drei";
 import { EffectComposer, Noise } from "@react-three/postprocessing";
 import { usePlay } from "./contexts/Play";
 import { Overlay } from "./components/Overlay";
+import { useMemo } from "react";
 
 function App() {
   const { play, end } = usePlay();
+
+  const effects = useMemo(
+    () => (
+      <EffectComposer>
+        <Noise opacity={0.08} />
+      </EffectComposer>
+    ),
+    []
+  );
   return (
     <>
       <Canvas>
@@ -27,9 +37,7 @@ function App() {
         >
           <Home />
         </ScrollControls>
-        <EffectComposer>
-          <Noise opacity={0.2} />
-        </EffectComposer>
+        {effects}
       </Canvas>
       <Overlay />
     </>
