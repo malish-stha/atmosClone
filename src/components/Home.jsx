@@ -589,7 +589,7 @@ export const Home = () => {
           curvePoints[1].y,
           curvePoints[1].z
         ),
-        subtitle: `Welcome to Wawatmos,
+        subtitle: `Welcome to Atmos,
 Have a seat and enjoy the ride!`,
       },
       {
