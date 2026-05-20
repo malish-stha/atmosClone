@@ -17,6 +17,7 @@ An immersive, scroll-based 3D web experience featuring an animated airplane jour
 ## 🛠️ Tech Stack
 
 **Core Technologies:**
+
 - React 18.2 - UI framework
 - Three.js 0.160 - 3D graphics library
 - React Three Fiber 8.15 - React renderer for Three.js
@@ -24,17 +25,20 @@ An immersive, scroll-based 3D web experience featuring an animated airplane jour
 - Vite 5.0 - Build tool and dev server
 
 **Animation & Effects:**
+
 - GSAP 3.12 - Professional animation library
 - React Three Postprocessing 2.15 - Post-processing effects
 - Lamina 1.1 - Layered shader material library
 
 **Development:**
+
 - ESLint - Code quality and consistency
 - Vite Plugin React - Babel-powered Fast Refresh
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js (v16 or higher)
 - npm or yarn
 
